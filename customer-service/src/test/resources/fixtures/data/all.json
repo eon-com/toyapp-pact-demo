@@ -1,0 +1,24 @@
+[
+  {
+    "id": 555,
+    "firstName": "Arnold",
+    "lastName": "Schwarzenegger",
+    "address": {
+      "street": "P.O. Box 1234",
+      "number": "--",
+      "zipCode": "CA 90406",
+      "place": "Santa Monica",
+      "country": "US"
+    }
+  },
+  {
+    "id": 666,
+    "firstName": "Bruce",
+    "lastName": "Willis"
+  },
+  {
+    "id": 777,
+    "firstName": "Sylvester",
+    "lastName": "Stalone"
+  }
+]

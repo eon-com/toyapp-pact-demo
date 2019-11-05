@@ -1,0 +1,27 @@
+[
+  {
+    "id": 555,
+    "first_name": "Arnold",
+    "last_name": "Schwarzenegger",
+    "date_of_birth": "1947-07-30",
+    "address": {
+      "street": "P.O. Box 1234",
+      "number": "--",
+      "zip_code": "CA 90406",
+      "place": "Santa Monica",
+      "country": "US"
+    }
+  },
+  {
+    "id": 666,
+    "first_name": "Bruce",
+    "last_name": "Willis",
+    "date_of_birth": "1955-03-19"
+  },
+  {
+    "id": 777,
+    "first_name": "Sylvester",
+    "last_name": "Stalone",
+    "date_of_birth": "1946-07-06"
+  }
+]
