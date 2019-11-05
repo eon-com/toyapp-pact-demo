@@ -14,13 +14,13 @@ Before delving into consumer-driven tests with Pact, we first should clarify why
 
 In the [original concept](https://martinfowler.com/articles/practical-test-pyramid.html) coined by [Mike Cohn](https://en.wikipedia.org/wiki/Mike_Cohn) there were basically three layers from bottom to top: UI tests, service tests and unit tests. 
 
-![Image displaying original test pyramid](./images/Pyramid 1.png)
+![Image displaying original test pyramid](./images/Pyramid_1.png)
 
 Unit tests ideally run for a short time and provide a high degree of isolation. Interactions with other units are usually mimicked by using mocks or stubs. As they can be easily automated without complex infrastructure they form the basis of any test strategy and cover a high proportion of the source code. In contrast to that, service tests require a more elaborate set-up that unit tests as different components must be brought into a condition suitable for testing interactions and integrative aspects. E. g. if a database is tested, it must be filled with appropriate test data. In addition, they are more vulnerable to unforseen test failures because they are affected by code changes in more than one component. UI tests test that the user interface of your application works correctly. User input should trigger the right actions and data should be presented to the user.
 
 Things have changed a bit since the first concept of the test pyramid. Back then tools like [Selenium](https://www.seleniumhq.org/) were used for both testing user interfaces and end-to-end integration. Today the term UI test is often related to UI specific tests only using backend mocks. In that sense they stand orthogonal to the test types discussed in the pyramid. Beyond that system tests are often subdivided into integration tests and component/contract tests. Beware of confusion: There is no standardized wording for the different test types so that you cannot realy on a common understanding of terminology (1).
 
-![Image displaying more elaborate test pyramid](./images/Pyramid 2.png)
+![Image displaying more elaborate test pyramid](./images/Pyramid_2.png)
 
 End-to-end tests assume a true application on a fully functional test system. They give you the biggest confidence when to decide if your software is working or not as they simulate a real user better than other test types. However, one buys the benefits of end-to-end testing at a high price as the set-up is much more complex than that of integration or unit tests as it requires a complete system in which each and every service runs with the associated database.
 
@@ -62,7 +62,7 @@ This is all about consumer-driven contract testing, so let's examine the consume
 
 We will later see in the hands-on chapter how to define interactions and write consumer tests with the Pact framework extension for JUnit 5.
 
-![Image displaying the Pact workflow](./images/Consumer Flow.png)
+![Image displaying the Pact workflow](./images/Consumer_Flow.png)
 
 ### Provider test
 
@@ -70,7 +70,7 @@ Provider tests serve for the provider verification where each request is sent to
 
 If the provider wants to change its API by e. g. adding an additional attribute to the response, it can simply verify all existing contracts. If the verification is successful, the changes should not break any of the consumers.
 
-![Image displaying the Pact workflow](./images/Provider Flow.png)
+![Image displaying the Pact workflow](./images/Provider_Flow.png)
 
 ## Implementing Pact tests for the JVM with JUnit 5
 
@@ -327,13 +327,13 @@ mvn install -N
 ```
 
 #### Pact broker entry page
-![Image displaying the Pact broker's entry page](./images/Screen 1.png)
+![Image displaying the Pact broker's entry page](./images/Screen_1.png)
 
 #### Pact broker relationships
-![Image displaying the Pact broker's relationships](./images/Screen 2.png)
+![Image displaying the Pact broker's relationships](./images/Screen_2.png)
 
 #### Pact broker contract (excerpt)
-![Image displaying the Pact broker's contract](./images/Screen 3.png)
+![Image displaying the Pact broker's contract](./images/Screen_3.png)
 
 ## Common questions
 
