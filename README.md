@@ -194,6 +194,7 @@ First of all we have to mark our test class with the **@ExtendWith** annotation:
 ```
 @ExtendWith(PactConsumerTestExt::class)
 class CustomerServicePactTest {
+	// [...]
 }
 ```
 
@@ -273,7 +274,7 @@ class ProviderPactVerificationTest {
     fun before(context: PactVerificationContext) {
         context.target = HttpTestTarget.fromUrl(URL(providerUrl)) 
         // There are some other targets such as HttpsTestTarget and with Spring SpringBootHttpTarget
- 		 [...]
+        // [...]
     }
 
     @TestTemplate
@@ -297,8 +298,8 @@ class ProviderPactVerificationTest {
             Persistence.writeCustomer(customer)
         }
     }
-    
-    [...]
+   
+    // [...]
 }
 ```
 

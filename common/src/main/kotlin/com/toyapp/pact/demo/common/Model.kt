@@ -1,6 +1,7 @@
 package com.toyapp.pact.demo.common
 
-fun Map<String, Any>.require(msg: String, block: (Any) -> Boolean): Unit {
+
+fun Map<String, Any>.require(msg: String, block: (Any) -> Boolean) {
     this.entries.forEach {
         require(block(it.value)) {
             "Argument ${it.key} $msg"

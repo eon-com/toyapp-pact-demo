@@ -2,12 +2,12 @@ package com.toyapp.pact.demo.core.data
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.toyapp.pact.demo.common.PaginationResponse
-import com.toyapp.pact.demo.common.JSONResourceLoader
-import com.toyapp.pact.demo.common.withDefaultConfiguration
-import com.toyapp.pact.demo.core.data.persistence.DefaultDataSource
-import com.toyapp.pact.demo.core.data.persistence.Persistence
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.toyapp.pact.demo.common.JSONResourceLoader
+import com.toyapp.pact.demo.common.PaginationResponse
+import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.core.data.persistence.DefaultEmbeddedDataSource
+import com.toyapp.pact.demo.core.data.persistence.Persistence
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
@@ -22,7 +22,14 @@ class CoreDataServiceAppTest {
 
     init {
         runBlocking {
-            Persistence.init(DefaultDataSource.create(), customers)
+            Persistence.init(
+                    DefaultEmbeddedDataSource.create(
+                            databaseName = CoreDataServiceConfig.databaseName,
+                            databaseUser = CoreDataServiceConfig.databaseUser,
+                            databasePassword = CoreDataServiceConfig.databasePasword
+                    ),
+                    customers
+            )
         }
     }
 

@@ -11,7 +11,7 @@ import javax.sql.DataSource
 
 open class ExposedExtension {
 
-    suspend fun <T: Table> init(dataSource: DataSource, vararg tables: T) {
+    suspend fun <T : Table> init(dataSource: DataSource, vararg tables: T) {
         Database.connect(dataSource)
         Persistence.dbQuery {
             SchemaUtils.create(*tables)

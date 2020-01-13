@@ -41,6 +41,9 @@ nb-configuration.xml
 # OS
 .DS_Store
 
+# Derby
+derby.log
+
 # Misc
 *.swp
 release.properties

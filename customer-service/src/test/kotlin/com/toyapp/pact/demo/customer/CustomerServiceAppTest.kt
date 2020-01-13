@@ -2,7 +2,6 @@ package com.toyapp.pact.demo.customer
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.toyapp.pact.demo.common.JSONResourceLoader
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.segment
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.version
 import com.toyapp.pact.demo.customer.TestData.getAllContentOrById

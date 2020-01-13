@@ -12,7 +12,7 @@ import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerHost
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerPort
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerScheme
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.port
-import com.toyapp.pact.demo.core.data.persistence.DefaultDataSource
+import com.toyapp.pact.demo.core.data.persistence.DefaultEmbeddedDataSource
 import com.toyapp.pact.demo.core.data.persistence.Persistence
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.embeddedServer
@@ -25,7 +25,7 @@ import java.net.URL
 
 @Provider("core-data-service")
 @PactBroker(scheme = pactBrokerScheme, host = pactBrokerHost, port = pactBrokerPort.toString())
-class ProviderPactVerificationTest {
+class CoreDataServicePactVerificationTest {
 
     private val providerUrl = "http://localhost:${port}"
 
@@ -76,7 +76,13 @@ class ProviderPactVerificationTest {
         fun startServer() {
             if (!serverStarted) {
                 runBlocking {
-                    Persistence.init(DefaultDataSource.create())
+                    Persistence.init(
+                            DefaultEmbeddedDataSource.create(
+                                    databaseName = CoreDataServiceConfig.databaseName,
+                                    databaseUser = CoreDataServiceConfig.databaseUser,
+                                    databasePassword = CoreDataServiceConfig.databasePasword
+                            )
+                    )
                 }
 
                 server = embeddedServer(factory, port) {

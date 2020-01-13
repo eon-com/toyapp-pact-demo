@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 
 object Tables {
 
-    val values = listOf(CustomerTable, AddressTable)
+    val values = listOf(AddressTable, CustomerTable)
 
     object CustomerTable : Table("customers") {
         val id = integer("id").primaryKey().uniqueIndex()

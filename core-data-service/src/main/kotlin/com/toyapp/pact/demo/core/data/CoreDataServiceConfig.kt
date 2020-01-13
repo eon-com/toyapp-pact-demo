@@ -15,6 +15,8 @@ object CoreDataServiceConfig {
     const val pactBrokerHost = "localhost"
     const val pactBrokerPort = 8080
 
-    const val dataSourceUrl = "jdbc:sqlite:data.db"
+    const val databaseName = "test"
+    const val databaseUser = "sa"
+    const val databasePasword = "sa"
 
 }

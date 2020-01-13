@@ -1,8 +1,8 @@
 package com.toyapp.pact.demo.creditcheck
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.toyapp.pact.demo.common.PaginationResponse
 import com.toyapp.pact.demo.common.withDefaultConfiguration
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.time.LocalDate
 
 object TestData {

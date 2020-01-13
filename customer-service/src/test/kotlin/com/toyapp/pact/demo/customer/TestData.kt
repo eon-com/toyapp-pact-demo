@@ -1,8 +1,8 @@
 package com.toyapp.pact.demo.customer
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.toyapp.pact.demo.common.PaginationResponse
 import com.toyapp.pact.demo.common.withDefaultConfiguration
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 object TestData {
 
