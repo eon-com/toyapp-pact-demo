@@ -21,7 +21,7 @@ fun ObjectMapper.withDefaultConfiguration(): ObjectMapper {
     configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
     configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
-    setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE;
 
     return this
 }
