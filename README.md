@@ -362,7 +362,7 @@ Not at all. It is vital to understand that Pact should be used to encourage API-
 
 This blog post revealed how to utilize Pact to test distributed service interactions without adding the complexitiy of with full-blown end-to-end tests. We have also learned about basic concepts such as the test pyramid and a concrete Pact implementation. Pact facilitates team discussions, but it is not designed to replace them entirely. Moreover, it fosters API first design and increases your confidence when deploying APIs that have been evolved over time. Pact is neither recommended for public APIs nor for being used as a comprehensive API documentation. However, interactions between services can be well documented with Pact. As Pact supports different programming languages you can use Pact even if your services are written in different languages.
 
---
+---
 
 1) However, the boundaries between different test categories is fluent and it is perfectly okay to use your own terminology for as long as they are part of the "ubiquitous language" in the sense of domain driven design. In other words: make sure that everyone has the same understanding in your company unit.
 
