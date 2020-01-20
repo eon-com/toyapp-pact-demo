@@ -3,7 +3,7 @@ package com.toyapp.pact.demo.core.data
 import com.toyapp.pact.demo.common.JSONResourceLoader
 import com.toyapp.pact.demo.common.PaginationResponse
 import com.toyapp.pact.demo.common.StatusMessage
-import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.factory
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.port
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.segment
@@ -54,7 +54,7 @@ fun Application.module() {
     install(CallLogging)
     install(ContentNegotiation) {
         jackson {
-            withDefaultConfiguration()
+            withCustomConfiguration()
         }
     }
 

@@ -4,7 +4,7 @@
 
 When deploying microservices or any other distributed system, one has to deal with a multitude of interfaces between the single services in place. Classical end-to-end tests require a test environment providing all services at the same time. However, testing HTTP/REST communication between these services can quickly turn into tedious work if one of the involved systems changes. This "expensive" testing strategy is reasonable for entire flows, but is not the best way for API focussed tests where one consumer expects a specific response from one producer. This is wher Consumer-driven contract tests come into play: interactions between services are tested more independently in a decoupled fashion. It does not entirely replace end-to-end tests, but it will speed up development for APIs as it focusses on interactions between consumers and producers.
 
-This blog post will illuminate the concept of consumer-driven tests. After discussing topics like test pyramid, end-to-end tests and the core mechanism behind Pact including common questions, we will introduce an example with Pact for JUnit 5 to showcase the basic test setup in JVM based environments. The closing section will briefly deal with the advantages and disadvantages of Pact.
+This blog post will illuminate the concept of consumer-driven tests. After discussing topics like test pyramid, naming test types and the core mechanism behind Pact including common questions, we will introduce an example with Pact for JUnit 5 to showcase the basic test setup in JVM based environments. The closing section will briefly deal with the advantages and disadvantages of Pact.
 
 ## Why consumer-driven tests?
 
@@ -18,7 +18,11 @@ In the [original concept](https://martinfowler.com/articles/practical-test-pyram
 
 Unit tests ideally run for a short time and provide a high degree of isolation. Interactions with other units are usually mimicked by using mocks or stubs. As they can be easily automated without complex infrastructure they form the basis of any test strategy and cover a high proportion of the source code. In contrast to that, service tests require a more elaborate set-up than unit tests as different components must be brought into a condition suitable for testing interactions and integrative aspects. E. g. if a database is tested, it must be filled with appropriate test data first. In addition, they are more vulnerable to unforseen test failures because they are affected by code changes in more than one component. UI tests verify if the user interface of your application works correctly: User input should trigger the right actions and data should be presented to the user.
 
-Things have changed a bit since the first concept of the test pyramid. Back then tools like [Selenium](https://www.seleniumhq.org/) were used for both testing user interfaces and end-to-end integration. Today the term UI test is often related to UI specific tests using backend mocks only. In that sense they stand orthogonal to the test types discussed in the pyramid. Beyond that system tests are often subdivided into integration tests and component/contract tests. Beware of confusion: There is no standardized wording for the different test types so that you cannot realy on a common understanding of terminology (1).
+Things have changed a bit since the first concept of the test pyramid. Back then tools like [Selenium](https://www.seleniumhq.org/) were used for both testing user interfaces and end-to-end integration. Today the term UI test is often used very unspecifically so it also covers UI component tests and UI application tests with mocked backends. Actually UI applications have their own test pyramid.
+
+Beyond that system tests are often subdivided into integration tests, contract tests and component tests. Beware of confusion: There is no standardized wording for the different test types so that you cannot rely on a common understanding of terminology. Some say these kinds of (system) tests are all integration tests, some say they are all component tests. Either way the terms sometimes conflate. Software engineers will argue endlessly about wording and definitions and often this tedious discussion is a big source of confusion (1).
+
+However, the boundaries between different test categories is fluent and it is perfectly okay to use your own terminology as long as they are part of the "ubiquitous language" in the sense of domain driven design. In other words: make sure that everyone has the same understanding in your company unit. The pyramid used in this blog post offers a taxonomy as a starting point for your own terminology.
 
 ![Image displaying more elaborate test pyramid](./images/Pyramid_2.png)
 
@@ -28,7 +32,7 @@ In a distributed architecture a high degree of automation is required, so settin
 
 ### Why not use integration tests then?
 
-Of course one can think of setting up a test environment with one consumer talking to one producer. However, the producer might be dependent on other services and providing a complete working environment is exactly what we wanted to avoid. Apart from that the producer might not be under control of the team building the test. So one thing you can do is mock the producer and validate the consumer against the mocked endpoints using a framework such as [REST-assured](http://rest-assured.io/). At first glance this approach is valid as it mitigates the pain of waiting for desired changes on the producer's side: We can add e. g. an additional field in the desired response by changing the mock implementation and swiftly go on implementing changes in the consumer. However, the desired changes for the producer have to be communicated. When executing the real end-to-end test this test might break as there is no guarantee if and when the change request is implemented in the producer. And in case the end-to-end test does not cover the required change, the build-wall remains green, then the software is deployed and finally the system in production will fail (2).
+Of course one can think of setting up a test environment with one consumer talking to one producer. However, the producer might be dependent on other services and both providing a complete working environment is exactly what we wanted to avoid (integration test degenerate into full-blown end-to-end tests). Apart from that the producer might not be under control of the team building the test. So one thing you can do is mock the producer and validate the consumer against the mocked endpoints using a framework such as [REST-assured](http://rest-assured.io/). At first glance this approach is valid as it mitigates the pain of waiting for desired changes on the producer's side: We can add e. g. an additional field in the desired response by changing the mock implementation and swiftly go on implementing changes in the consumer. However, the desired changes for the producer have to be communicated. When executing the real end-to-end test this test might break as there is no guarantee if and when the change request is implemented in the producer. And in case the end-to-end test does not cover the required change, the build-wall remains green, then the software is deployed and finally the system in production will fail (2).
 
 So this is where consumer-driven contract tests come to the scene: they provide a mock producer (called mock provider), facilitate change requests between teams and make sure that a consumer can only be deployed when the changes necessary are implemented in the producer.
 
@@ -74,7 +78,7 @@ If the provider wants to change its API by e. g. adding an additional attribute 
 
 ## Implementing Pact tests for the JVM with JUnit 5
 
-So this is the hands-on part of the blog post. The toy application provided alongside this blog post was originally a POC for Ktor (5). It requires Java 11 so make sure to point your JAVA_HOME environment variable to the right directory. You can get the tyo application from [here](https://github.com/orgs/eon-com/projects/tdb). After the download please run `./build.sh` (using Terminal on macOS, Linux or [Git BASH](https://gitforwindows.org/) on Windows) in order to see if everything works as expected. Please make sure that port 8080 on your local machine is available.
+So this is the hands-on part of the blog post. The toy application provided alongside this blog post was originally a POC for Ktor (5). Apart from Docker it requires Java 11 so make sure to point your JAVA_HOME environment variable to the right directory. You can get the tyo application from [here](https://github.com/eon-com/toyapp-pact-demo). After the download please run `./build.sh` (using Terminal on macOS, Linux or [Git BASH](https://gitforwindows.org/) on Windows) in order to see if everything works as expected. Please make sure that port 8080 on your local machine is available.
 
 ### Project structure
 
@@ -118,6 +122,7 @@ The data provided by the core-data-service will look like this:
 ```
 
 ### Prerequisites for Maven
+
 As we decided to use Maven for our toy application we have to do quite a few things first. First of all we use the latest and greates **failsafe** and **surefire** plugin version, in our case **3.0.0-M3**. It supports both JUnit 5 and the Pact version we use. As opposed to a real world microservice scenario we have the luxury to run a multimodule Maven project, that is why we put the following snippet in our parent POM file inside the propierties- and pluginManagement-section to avoid having this boilerplate in each and every module:
 
 ```
@@ -264,22 +269,23 @@ Each URL segment has to be called exaclty one time, otherwise the test will brea
 
 ### Pact verfication
 ```
+@ExtendWith(ApplicationContextExtension::class, PersistenceExtension::class)
 @Provider("core-data-service")
 @PactBroker(scheme = pactBrokerScheme, host = pactBrokerHost, port = pactBrokerPort.toString())
-class ProviderPactVerificationTest {
+class CoreDataServicePactVerificationTest {
 
-    private val providerUrl = "http://localhost:${port}"
+    companion object {
+        private const val PROVIDER_URL = "http://localhost:${port}"
+    }
 
     @BeforeEach
-    fun before(context: PactVerificationContext) {
-        context.target = HttpTestTarget.fromUrl(URL(providerUrl)) 
-        // There are some other targets such as HttpsTestTarget and with Spring SpringBootHttpTarget
-        // [...]
+    fun beforeEach(context: PactVerificationContext) {
+        context.target = HttpTestTarget.fromUrl(URL(PROVIDER_URL))
     }
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider::class)
-    fun pactVerificationTestTemplate(context: PactVerificationContext) {
+    fun pactVerificationTest(context: PactVerificationContext) {
         context.verifyInteraction();
     }
 
@@ -298,15 +304,29 @@ class ProviderPactVerificationTest {
             Persistence.writeCustomer(customer)
         }
     }
-   
-    // [...]
+
+    @State("there is no customer with id 0")
+    fun noCustomerWithId0() {
+        // Nothing to do here
+    }
+
+    @State("there is no customer with invalid id a")
+    fun noCustomerForInvalidId() {
+        // Nothing to do here
+    }
+
 }
 ```
 
-You can set the test target (the object that defines the target of the test, which should point to your provider) on the PactVerificationContext, but you need to do this in a before test method (annotated with @BeforeEach). 
+In this setup we use two custom extensions for JUnit 5 for application context (starting Ktor) and persistence (database setup and cleaning). Most important section is the method annotated with @BeforeEach where you set the test target (the object that defines the target of the test, which should point to your provider) on the PactVerificationContext. There are some other targets such as HttpsTestTarget and SpringBootHttpTarget, depending on what you need. You can see that the state is provided by inserting required customer data to the database. For more information on that see **common questions** section.
 
 ### Running the complete Pact flow
+
+There is a script to be used to execute the complete flow in a simple manner. Once again, you will need Java 11 so make sure to point your JAVA_HOME environment variable to the right directory:
+
 ```./run-pact-flow.sh```
+
+And here is the script in detail:
 
 ```
 #!/usr/bin/env bash
@@ -327,20 +347,39 @@ mvn install -N
 (cd ./core-data-service && exec mvn clean test pact:verify)
 ```
 
+The script shows the actual flow: first of all, a broker will be started on localhost:8080. After installing the common JAR dependency both consumers, **customer-service** and **creditcheck**, will be tested and their contract will be published to the Pact proker. Finally the **core-data-service** is verified against the contract uploaded to the broker.
+
 #### Pact broker entry page
+
+Just go to [http://localhost:8080](http://localhost:8080) after having executed the script. You will find the entry page with an overview displaying several columns: 
+
 ![Image displaying the Pact broker's entry page](./images/Screen_1.png)
 
 #### Pact broker relationships
+
+If you further click on **core-data-service** you will find all relationsships between provider and consumers.
+
 ![Image displaying the Pact broker's relationships](./images/Screen_2.png)
 
 #### Pact broker contract (excerpt)
+
+Another click on the line/edge between **customer-service** and **core-data-service** will take you to this page:
+
 ![Image displaying the Pact broker's contract](./images/Screen_3.png)
+
+Here you can find the actual contract displaying all information related. Make yourself familiar with the [Pact broker](https://github.com/pact-foundation/pact_broker) as it is an easy (if not the easiest) way of exchaning Pact contracts and visualising them. 
 
 ## Common questions
 
+### What is API first/API-led/API-driven?
+
+Basically, the approach is about the design of the API at the beginning of a project. The very first step should be to think about how the API should look and work in detail so that it is as universal as possible, extensible and easy to understand. Without the API-First approach, on the other hand, there is a great risk that the API will be heavily geared towards the implementation and use cases of existing systems, bearing the risk that the API is not universal or extensible enough for future systems. For REST-based APIs there are tools such as [OpenAPI Specification/Swagger](https://swagger.io/), [RAML](https://raml.org/), [API Blueprint](https://apiblueprint.org/), [apiDoc](https://apidocjs.com/) and [slate](https://github.com/slatedocs/slate). 
+
+Using Swagger is not a wrong choice as it is feature-rich and you can choose between two different approaches, **contract-first** and **code-first**. For contract first your APIs are designed using an editor. With [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) both client and server code can be generated directly from it and there are generators for all common languages. In code-first development, the specification takes its starting point in the program code (e. g. JAVA interfaces/REST endpoints). Swagger annotations make it possible to set the corresponding OpenAPI specification properties in Java (6).
+
 ### Does it replace OpenAPI Specification aka Swagger?
 
-No. [Swagger](https://swagger.io/) is a framework that allows complete description of the structure of your APIs. You can also automatically built client libraries or server stubs based on Swagger documentation, and vice versa, create Swagger specs based on annotations used in your source code. As opposed to this, Pact contracts describe what a particular consumer expects from the API request response. Of course this has also some charachteristics of a documentation, however, a provider can have more than one consumer, and thus more than one contract, so Swagger is a centralized overview over all parameters, return values and authorization information which Pact is not.
+No. [Swagger](https://swagger.io/) is a framework that allows complete description of the structure of your APIs. You can also automatically built client libraries or server stubs based on Swagger documentation, and vice versa, create Swagger specs based on annotations used in your source code. As opposed to this, Pact contracts describe what a particular consumer expects from the API request response. Of course this has also some charachteristics of a documentation, however, a provider can have more than one consumer, and thus more than one contract, so Swagger is a centralized overview over all parameters, return values and authorization information whereas Pact focusses on service-to-service interactions.
 
 ### Is Pact suitable for public APIs?
 
@@ -348,7 +387,7 @@ Pact is an appropriate solution when both consumer(s) and provider can establish
 
 ### Does Pact only support synchronous HTTP/REST-based communication?
 
-No, it is not restricted to HTTP/REST. Pact version 3.0 introduces messages for ["services that communicate via event streams and message queues"](https://github.com/Pact-foundation/Pact-specification/tree/version-3#version-30). There is also a blogpost by the makers of Pact, describing ["Contract Testing Serverless and Asynchronous Applications"](https://medium.com/@DoorDash/contract-testing-with-Pact-7cf108ced8c4).
+No, it is not restricted to HTTP/REST. Pact version 3.0 introduces messages for [services that communicate via event streams and message queues](https://github.com/Pact-foundation/Pact-specification/tree/version-3#version-30). There is also a blogpost by the makers of Pact, describing [Contract Testing Serverless and Asynchronous Applications](https://medium.com/@DoorDash/contract-testing-with-Pact-7cf108ced8c4).
 
 ### How can I deal with optional attributes/fields?
 
@@ -358,18 +397,26 @@ The concept for optional attributes is not provided by Pact. If you want to expl
 
 Not at all. It is vital to understand that Pact should be used to encourage API-led design, increase confidence, and facilitate inter-team discussions, not replace them! 
 
+### Can the Pact verification include a database setup?
+
+According to the most sources including official documentation it even should: [Global state](https://docs.pact.io/implementation_guides/ruby/provider_states#global-state), [Pact tests: what about state data?](https://techblog.poppulo.com/pacts-provider-states-and-matchers/). Pact tests help avoid the hassle of setting up complete environments for end-to-end or full-fledged integration test talking to other systems. A database is part of the realm of your microservice and thus no "other system" from a business point of view (there should be no databases shared by two ore more microservices) and setting up test databases using [database containers](https://www.testcontainers.org/modules/databases/) is an easy task.
+
+However, no best practice and no good idea should be turned into a dogma: if you have enough integration tests including (real) database setup, it is perfectly okay to mock database connections or use in-memory replacements in order to reduce build times.
+
 ## Summary and final thoughts
 
 This blog post revealed how to utilize Pact to test distributed service interactions without adding the complexitiy of with full-blown end-to-end tests. We have also learned about basic concepts such as the test pyramid and a concrete Pact implementation. Pact facilitates team discussions, but it is not designed to replace them entirely. Moreover, it fosters API first design and increases your confidence when deploying APIs that have been evolved over time. Pact is neither recommended for public APIs nor for being used as a comprehensive API documentation. However, interactions between services can be well documented with Pact. As Pact supports different programming languages you can use Pact even if your services are written in different languages.
 
 ---
 
-1) However, the boundaries between different test categories is fluent and it is perfectly okay to use your own terminology for as long as they are part of the "ubiquitous language" in the sense of domain driven design. In other words: make sure that everyone has the same understanding in your company unit.
+1) Unit-, integration-, end-to-end etc. test are a classification concerning scope and granularity, they are technology facing. In contrast to that the term "acceptance test" is business facing, it describes the fact, that the test gives relevant business centric feedback about the specified functionality. Acceptance tests can be set on on different levels of granularity, but in everyday speech they are most often related to tests in the upper part of the test pyramid.
 
 2) Mocking the producer can be an arduous work itself, too. The system to be mocked might be complex and (manual) mocking often leads to overly specified tests and fixtures.
 
 3) Part of a full consumer workflow is a mechanism preventing deployment of the consumer consumer as long as the provider tests are not successful. If you use a Pact broker, you will find a webhook mechanism which can be used to trigger consumer builds after successful execution of the provider test.
 
-4) In the latter case each client has to be configured in a way that it ignores additional attributes inside the response (according to Postel's law). When using Jackson as JSON processor/(de-)serializer, this can be done with something like `new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)`, ideally at a central location of your code.
+4) In the latter case each client has to be configured in a way that it ignores additional attributes inside the response (according to [Postel's law](https://devopedia.org/postel-s-law)). When using Jackson as JSON processor/(de-)serializer, this can be done with something like `ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)`, ideally at a central location of your code.
 
 5) The toy application includes the following technologies: [Kotlin](https://kotlinlang.org/), [Ktor](https://ktor.io/) (microframework for Kotlin), [Exposed](https://github.com/JetBrains/Exposed) (lightweight SQL library written for Kotlin), [JUnit 5](https://junit.org/junit5/), and good old [Maven](https://maven.apache.org/).
+
+6) Sometimes the term contract-first is used synonymously with API-first.

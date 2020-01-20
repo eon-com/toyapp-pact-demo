@@ -1,6 +1,6 @@
 package com.toyapp.pact.demo.customer
 
-import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.segment
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.version
 import com.toyapp.pact.demo.customer.TestData.getAllContentOrById
@@ -22,7 +22,7 @@ object MockHttpClient {
     fun build() = HttpClient(MockEngine) {
         install(JsonFeature) {
             serializer = JacksonSerializer {
-                withDefaultConfiguration()
+                withCustomConfiguration()
             }
         }
 

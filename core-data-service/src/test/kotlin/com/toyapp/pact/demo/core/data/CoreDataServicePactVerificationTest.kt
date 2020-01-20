@@ -7,34 +7,31 @@ import au.com.dius.pact.provider.junit5.HttpTestTarget
 import au.com.dius.pact.provider.junit5.PactVerificationContext
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider
 import com.toyapp.pact.demo.common.JSONResourceLoader
-import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.factory
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerHost
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerPort
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.pactBrokerScheme
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.port
-import com.toyapp.pact.demo.core.data.persistence.DefaultEmbeddedDataSource
+import com.toyapp.pact.demo.core.data.extensions.ApplicationContextExtension
+import com.toyapp.pact.demo.core.data.extensions.PersistenceExtension
 import com.toyapp.pact.demo.core.data.persistence.Persistence
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.embeddedServer
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
 import java.net.URL
 
+@ExtendWith(ApplicationContextExtension::class, PersistenceExtension::class)
 @Provider("core-data-service")
 @PactBroker(scheme = pactBrokerScheme, host = pactBrokerHost, port = pactBrokerPort.toString())
 class CoreDataServicePactVerificationTest {
 
-    private val providerUrl = "http://localhost:${port}"
+    companion object {
+        private const val PROVIDER_URL = "http://localhost:${port}"
+    }
 
     @BeforeEach
-    fun before(context: PactVerificationContext) {
-        context.target = HttpTestTarget.fromUrl(URL(providerUrl))
-        runBlocking {
-            Persistence.truncate()
-        }
+    fun beforeEach(context: PactVerificationContext) {
+        context.target = HttpTestTarget.fromUrl(URL(PROVIDER_URL))
     }
 
     @TestTemplate
@@ -61,40 +58,12 @@ class CoreDataServicePactVerificationTest {
 
     @State("there is no customer with id 0")
     fun noCustomerWithId0() {
+        // Nothing to do here
     }
 
     @State("there is no customer with invalid id a")
     fun noCustomerForInvalidId() {
-    }
-
-    companion object {
-        private var serverStarted = false
-        private lateinit var server: ApplicationEngine
-
-        @BeforeAll
-        @JvmStatic
-        fun startServer() {
-            if (!serverStarted) {
-                runBlocking {
-                    Persistence.init(
-                            DefaultEmbeddedDataSource.create(
-                                    databaseName = CoreDataServiceConfig.databaseName,
-                                    databaseUser = CoreDataServiceConfig.databaseUser,
-                                    databasePassword = CoreDataServiceConfig.databasePasword
-                            )
-                    )
-                }
-
-                server = embeddedServer(factory, port) {
-                    module()
-                }
-                server.start()
-                serverStarted = true
-                Runtime.getRuntime().addShutdownHook(Thread {
-                    server.stop(0, 0, java.util.concurrent.TimeUnit.SECONDS)
-                })
-            }
-        }
+        // Nothing to do here
     }
 
 }

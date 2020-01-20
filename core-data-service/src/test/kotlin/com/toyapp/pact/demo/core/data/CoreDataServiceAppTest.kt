@@ -5,31 +5,30 @@ import assertk.assertions.isEqualTo
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.toyapp.pact.demo.common.JSONResourceLoader
 import com.toyapp.pact.demo.common.PaginationResponse
-import com.toyapp.pact.demo.common.withDefaultConfiguration
-import com.toyapp.pact.demo.core.data.persistence.DefaultEmbeddedDataSource
+import com.toyapp.pact.demo.common.withCustomConfiguration
+import com.toyapp.pact.demo.core.data.extensions.PersistenceExtension
 import com.toyapp.pact.demo.core.data.persistence.Persistence
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(PersistenceExtension::class)
 class CoreDataServiceAppTest {
 
-    private val mapper = jacksonObjectMapper().withDefaultConfiguration()
-    private val customers = JSONResourceLoader.loadCollectionFromResource("/fixtures/data/all.json", Customer::class.java)
+    companion object {
+        private val mapper = jacksonObjectMapper().withCustomConfiguration()
+        private val customers = JSONResourceLoader.loadCollectionFromResource("/fixtures/data/all.json", Customer::class.java)
+    }
 
-    init {
+    @BeforeEach
+    fun beforeEach() {
         runBlocking {
-            Persistence.init(
-                    DefaultEmbeddedDataSource.create(
-                            databaseName = CoreDataServiceConfig.databaseName,
-                            databaseUser = CoreDataServiceConfig.databaseUser,
-                            databasePassword = CoreDataServiceConfig.databasePasword
-                    ),
-                    customers
-            )
+            Persistence.writeCustomers(customers)
         }
     }
 

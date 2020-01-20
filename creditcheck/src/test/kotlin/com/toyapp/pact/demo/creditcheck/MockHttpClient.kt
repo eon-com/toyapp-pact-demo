@@ -1,6 +1,6 @@
 package com.toyapp.pact.demo.creditcheck
 
-import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.segment
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.version
 import com.toyapp.pact.demo.creditcheck.TestData.getAllContentOrById
@@ -22,7 +22,7 @@ object MockHttpClient {
     fun build() = HttpClient(MockEngine) {
         install(JsonFeature) {
             serializer = JacksonSerializer {
-                withDefaultConfiguration()
+                withCustomConfiguration()
             }
         }
 

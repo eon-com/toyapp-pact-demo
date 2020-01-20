@@ -2,7 +2,7 @@ package com.toyapp.pact.demo.customer
 
 import com.toyapp.pact.demo.common.PaginationResponse
 import com.toyapp.pact.demo.common.StatusMessage
-import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.factory
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.localPort
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.remotePath
@@ -42,7 +42,7 @@ fun Application.moduleWithDeps(httpClient: HttpClient) {
     install(CallLogging)
     install(ContentNegotiation) {
         jackson {
-            withDefaultConfiguration()
+            withCustomConfiguration()
         }
     }
 

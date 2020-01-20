@@ -2,7 +2,7 @@ package com.toyapp.pact.demo.creditcheck
 
 import com.toyapp.pact.demo.common.PaginationResponse
 import com.toyapp.pact.demo.common.StatusMessage
-import com.toyapp.pact.demo.common.withDefaultConfiguration
+import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.factory
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.localPort
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.remotePath
@@ -42,7 +42,7 @@ fun Application.moduleWithDeps(httpClient: HttpClient) {
     install(CallLogging)
     install(ContentNegotiation) {
         jackson {
-            withDefaultConfiguration()
+            withCustomConfiguration()
         }
     }
 

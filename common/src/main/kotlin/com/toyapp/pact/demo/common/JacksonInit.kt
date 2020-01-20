@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 
-fun ObjectMapper.withDefaultConfiguration(): ObjectMapper {
+fun ObjectMapper.withCustomConfiguration(): ObjectMapper {
     configure(SerializationFeature.INDENT_OUTPUT, true)
     setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
         indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
