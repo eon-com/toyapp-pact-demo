@@ -8,7 +8,6 @@ object CoreDataServiceConfig {
     const val port = 8082
     val factory = Netty
 
-    const val version = "v1"
     const val segment = "customers"
 
     const val pactBrokerScheme = "http"

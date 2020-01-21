@@ -3,7 +3,6 @@ package com.toyapp.pact.demo.customer
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.segment
-import com.toyapp.pact.demo.customer.CustomerServiceConfig.version
 import com.toyapp.pact.demo.customer.TestData.getAllContentOrById
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -19,7 +18,7 @@ class CustomerServiceAppTest {
                 httpClient = MockHttpClient.build()
         )
     }) {
-        with(handleRequest(HttpMethod.Get, "/$version/$segment")) {
+        with(handleRequest(HttpMethod.Get, "/$segment")) {
             assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
             assertThat(response.content).isEqualTo(getAllContentOrById())
         }
@@ -31,7 +30,7 @@ class CustomerServiceAppTest {
                 httpClient = MockHttpClient.build()
         )
     }) {
-        with(handleRequest(HttpMethod.Get, "/$version/$segment/666")) {
+        with(handleRequest(HttpMethod.Get, "/$segment/666")) {
             assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
             assertThat(response.content).isEqualTo(getAllContentOrById(666))
         }

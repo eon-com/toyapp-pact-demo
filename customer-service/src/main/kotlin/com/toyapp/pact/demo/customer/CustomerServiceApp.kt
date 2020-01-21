@@ -7,7 +7,6 @@ import com.toyapp.pact.demo.customer.CustomerServiceConfig.factory
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.localPort
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.remotePath
 import com.toyapp.pact.demo.customer.CustomerServiceConfig.segment
-import com.toyapp.pact.demo.customer.CustomerServiceConfig.version
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -47,7 +46,7 @@ fun Application.moduleWithDeps(httpClient: HttpClient) {
     }
 
     routing {
-        get("/$version/$segment") {
+        get("/$segment") {
             try {
                 val customers = httpClient.get<PaginationResponse<Customer>>(remotePath).payload
                 call.respond(PaginationResponse(payload = customers))
@@ -58,7 +57,7 @@ fun Application.moduleWithDeps(httpClient: HttpClient) {
             }
         }
 
-        get("/$version/$segment/{id}") {
+        get("/$segment/{id}") {
             val id = call.parameters["id"]?.toIntOrNull()
             id?.let {
                 try {

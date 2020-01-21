@@ -7,7 +7,6 @@ import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.factory
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.localPort
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.remotePath
 import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.segment
-import com.toyapp.pact.demo.creditcheck.CreditCheckConfig.version
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -47,12 +46,12 @@ fun Application.moduleWithDeps(httpClient: HttpClient) {
     }
 
     routing {
-        get("/$version/$segment") {
+        get("/$segment") {
             val customers = httpClient.get<PaginationResponse<Customer>>(remotePath)
             call.respond(customers)
         }
 
-        get("/$version/$segment/{id}") {
+        get("/$segment/{id}") {
             val id = call.parameters["id"]?.toIntOrNull()
             id?.let {
                 try {

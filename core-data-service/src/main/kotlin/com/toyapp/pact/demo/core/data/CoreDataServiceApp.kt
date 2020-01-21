@@ -7,7 +7,6 @@ import com.toyapp.pact.demo.common.withCustomConfiguration
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.factory
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.port
 import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.segment
-import com.toyapp.pact.demo.core.data.CoreDataServiceConfig.version
 import com.toyapp.pact.demo.core.data.persistence.DefaultEmbeddedDataSource
 import com.toyapp.pact.demo.core.data.persistence.Persistence
 import io.ktor.application.Application
@@ -59,11 +58,11 @@ fun Application.module() {
     }
 
     routing {
-        get("/$version/$segment") {
+        get("/$segment") {
             call.respond(PaginationResponse(1, Persistence.readCustomers()))
         }
 
-        get("/$version/$segment/{id}") {
+        get("/$segment/{id}") {
             val id = call.parameters["id"]?.toIntOrNull()
             id?.let {
                 val customer = Persistence.readCustomer(id = it)

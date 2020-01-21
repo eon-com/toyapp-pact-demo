@@ -36,7 +36,7 @@ class CoreDataServiceAppTest {
     fun `request without id should return all customers`() = withTestApplication({
         module()
     }) {
-        with(handleRequest(HttpMethod.Get, "/v1/customers")) {
+        with(handleRequest(HttpMethod.Get, "/customers")) {
             assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
             assertThat(response.content).isEqualTo(mapper.writeValueAsString(PaginationResponse(page = 1, payload = customers)))
         }
@@ -46,7 +46,7 @@ class CoreDataServiceAppTest {
     fun `request without id 666 should return selected customer`() = withTestApplication({
         module()
     }) {
-        with(handleRequest(HttpMethod.Get, "/v1/customers/666")) {
+        with(handleRequest(HttpMethod.Get, "/customers/666")) {
             assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
             assertThat(response.content).isEqualTo(mapper.writeValueAsString(customers.firstOrNull { it.id == 666 }))
         }

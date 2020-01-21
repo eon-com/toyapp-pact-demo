@@ -11,11 +11,9 @@ object CreditCheckConfig {
     private const val remoteProtocol = "http"
     private const val remoteBaseUrl = "127.0.0.1"
     private const val remotePort = 8082
-    private const val remoteVersion = "v1"
     private const val remoteSegment = "customers"
 
-    const val remotePath = "$remoteProtocol://$remoteBaseUrl:$remotePort/$remoteVersion/$remoteSegment"
-    const val version = "v1"
+    const val remotePath = "$remoteProtocol://$remoteBaseUrl:$remotePort/$remoteSegment"
     const val segment = "customers"
 
 }
