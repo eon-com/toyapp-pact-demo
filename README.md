@@ -269,6 +269,9 @@ After having defined our interactions we also have to test them against the mock
 Each URL segment has to be called exaclty one time, otherwise the test will break. Of course you can also test the HTTP response body.
 
 ### Pact verfication
+
+Now we change to the provider side and prepare the states necessary to run the pact tests there. 
+
 ```kotlin
 @ExtendWith(ApplicationContextExtension::class, PersistenceExtension::class)
 @Provider("core-data-service")
