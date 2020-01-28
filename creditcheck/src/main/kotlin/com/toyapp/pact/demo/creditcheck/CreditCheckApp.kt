@@ -24,7 +24,9 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 
 class CreditCheckApp {
+
     companion object {
+
         @JvmStatic
         fun main(args: Array<String>) {
             val server = embeddedServer(factory, localPort) {
@@ -33,6 +35,7 @@ class CreditCheckApp {
             server.start(wait = true)
         }
     }
+
 }
 
 fun Application.moduleWithDeps(httpClient: HttpClient) {

@@ -12,6 +12,7 @@ import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.features.CallLogging
 import io.ktor.features.Compression
 import io.ktor.features.ContentNegotiation
@@ -24,7 +25,9 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 
 class CustomerServiceApp {
+
     companion object {
+
         @JvmStatic
         fun main(args: Array<String>) {
             val server = embeddedServer(factory, localPort) {
@@ -32,7 +35,9 @@ class CustomerServiceApp {
             }
             server.start(wait = true)
         }
+
     }
+
 }
 
 fun Application.moduleWithDeps(httpClient: HttpClient) {

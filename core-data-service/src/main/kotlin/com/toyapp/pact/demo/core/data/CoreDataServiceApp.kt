@@ -25,7 +25,9 @@ import io.ktor.server.engine.embeddedServer
 import kotlinx.coroutines.runBlocking
 
 class CoreDataServiceApp {
+
     companion object {
+
         @JvmStatic
         fun main(args: Array<String>) {
             val customers = JSONResourceLoader.loadCollectionFromResource("/migrations/data/initial.json", Customer::class.java)
@@ -44,6 +46,7 @@ class CoreDataServiceApp {
             }
             server.start(wait = true)
         }
+
     }
 }
 
