@@ -131,8 +131,8 @@ As we decided to use Maven for our toy application we have to do a few things fi
 <project>
     <properties>
         <!-- [...] -->
-        <failsafe.version>3.0.0-M3</failsafe.version>
-        <surefire.version>3.0.0-M3</surefire.version>
+        <failsafe.version>3.0.0-M4</failsafe.version>
+        <surefire.version>3.0.0-M4</surefire.version>
         <!-- [...] -->
         <pact.dir>target/pacts</pact.dir>
         <pact.broker.schema>http</pact.broker.schema>
