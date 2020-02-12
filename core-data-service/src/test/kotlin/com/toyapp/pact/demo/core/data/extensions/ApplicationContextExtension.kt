@@ -14,7 +14,7 @@ class ApplicationContextExtension : BeforeAllCallback {
         }
         server.start()
         Runtime.getRuntime().addShutdownHook(Thread {
-            server.stop(0, 0, java.util.concurrent.TimeUnit.SECONDS)
+            server.stop(0, 0)
         })
     }
 
