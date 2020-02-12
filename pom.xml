@@ -10,13 +10,14 @@
     <properties>
         <kotlin.version>1.3.60</kotlin.version>
         <ktor.version>1.3.0</ktor.version>
-        <junit.version>5.5.2</junit.version>
+        <junit.version>5.6.0</junit.version>
         <pact.version>3.6.14</pact.version>
-        <jackson.version>2.10.1</jackson.version>
-        <assertk.version>0.20</assertk.version>
+        <jackson.version>2.10.2</jackson.version>
+        <assertk.version>0.21</assertk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <failsafe-surefire.version>3.0.0-M4</failsafe-surefire.version>
+        <failsafe.version>3.0.0-M4</failsafe.version>
+        <surefire.version>3.0.0-M4</surefire.version>
         <src.main.kotlin>src/main/kotlin</src.main.kotlin>
         <src.test.kotlin>src/test/kotlin</src.test.kotlin>
         <pact.dir>target/pacts</pact.dir>
@@ -229,7 +230,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${failsafe-surefire.version}</version>
+                    <version>${surefire.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.jupiter</groupId>
@@ -246,7 +247,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${failsafe-surefire.version}</version>
+                    <version>${failsafe.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

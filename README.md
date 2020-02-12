@@ -146,7 +146,7 @@ As we decided to use Maven for our toy application we have to do a few things fi
                 <!-- [...] -->
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${failsafe-surefire.version}</version>
+                    <version>${surefire.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.jupiter</groupId>
@@ -163,7 +163,7 @@ As we decided to use Maven for our toy application we have to do a few things fi
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${failsafe-surefire.version}</version>
+                    <version>${failsafe.version}</version>
                 </plugin>
             </plugins>
             <plugin>
