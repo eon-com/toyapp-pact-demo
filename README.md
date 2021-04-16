@@ -393,7 +393,7 @@ Pact is an appropriate solution when both consumer(s) and provider can establish
 
 ### Does Pact only support synchronous HTTP/REST-based communication?
 
-No, it is not restricted to HTTP/REST. Pact version 3.0 introduces messages for [services that communicate via event streams and message queues](https://github.com/Pact-foundation/Pact-specification/tree/version-3#version-30). There is also a blogpost by the makers of Pact, describing [Contract Testing Serverless and Asynchronous Applications](https://medium.com/@DoorDash/contract-testing-with-Pact-7cf108ced8c4).
+No, it is not restricted to HTTP/REST. Pact version 3.0 introduces messages for [services that communicate via event streams and message queues](https://github.com/Pact-foundation/Pact-specification/tree/version-3#version-30). There is also a blogpost by the makers of Pact, describing [Contract Testing Serverless and Asynchronous Applications](https://doordash.engineering/2018/11/05/contract-testing-with-pact/).
 
 ### How can I deal with optional attributes/fields?
 
